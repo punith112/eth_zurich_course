@@ -29,8 +29,7 @@ namespace husky_highlevel_controller
             * Destructor
             */
             virtual ~HuskyHighLevelController();
-                        // ROS node handle
-            ros::NodeHandle &nh_;
+
 
         private:
 
@@ -40,7 +39,8 @@ namespace husky_highlevel_controller
             */
             void scanMessageReceived(const sensor_msgs::LaserScan& msg);
 
-
+            // ROS node handle
+            ros::NodeHandle &nh_;
 
             // ROS topic subscriber_
             ros::Subscriber sub;
