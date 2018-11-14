@@ -13,11 +13,20 @@
 #include <ros/ros.h> //ALWAYS need to include this
 #include <sensor_msgs/LaserScan.h>
 
+#include <geometry_msgs/Twist.h>
+
+#include "pid.h"
+
 namespace husky_highlevel_controller
 {
     class HuskyHighLevelController
     {
         public:
+            float smallest_value;
+            int smallest_value_index;
+            float angle_increment;
+            float angle_minimum;
+            float cte;
 
             /*
             * Constructor
@@ -30,6 +39,9 @@ namespace husky_highlevel_controller
             */
             virtual ~HuskyHighLevelController();
 
+            void hit_the_pillar();
+            ros::NodeHandle nh_;
+
 
         private:
 
@@ -37,16 +49,24 @@ namespace husky_highlevel_controller
             * ROS topic callback method
             * @param msg the received message
             */
-            void scanMessageReceived(const sensor_msgs::LaserScan& msg);
 
             // ROS node handle
-            ros::NodeHandle &nh_;
+            //ros::NodeHandle nh_;
 
-            // ROS topic subscriber_
-            ros::Subscriber sub;
+            // callback
+            void scanMessageReceived(const sensor_msgs::LaserScan& msg);
+
+            ros::Subscriber sub; //these will be set up within the class constructor, hiding these ugly details
+            ros::Publisher pub_vel;
+
+            // member methods as well:
+            void initializeSubscribers(); // we will define some helper methods to encapsulate the gory details of initializing subscribers, publishers and services
+            void initializePublishers();  
 
             std::string topic_name_;
+            
             int topic_size_queue_;
+
 
     }; /* class */
 } /* namespace */

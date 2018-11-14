@@ -4,11 +4,9 @@
 
 #include <ctime>
 #include <cstdio>
-#include "Eigen/Dense"
 #include <iostream>
 #include <cmath> 
 
-using Eigen::VectorXd;
 
 class PID {
 public:
@@ -42,13 +40,6 @@ public:
     double previous_err_speed;
     bool is_initialized_;
 
-    /*
-        Twiddle
-    */ 
-
-    VectorXd K; 
-    VectorXd dK;
-
     double sum_dp;
 
     int control_K; // Control which K parameters will be changed
@@ -62,8 +53,6 @@ public:
     double previous_cte_avg;
     double current_cte_avg;
     int loop_number; // NUmber of loops that calcule the CTE Average
-
-    double sum_dK;
 
     // Time
     double previous_time;
@@ -83,29 +72,21 @@ public:
     */
     void Init(double Kp, double Kd, double Ki);
 
-    void Init_PD(double Kp2, double Kd2);
-
     /*
     * Update the PID error variables given cross track error.
     */
     void UpdateError(double cte, double dt);
-
-    void UpdateErrorSpeed(double err_speed, double dt) ;
 
     /*
     * Calculate the total PID error.
     */
     double TotalError();
 
-    double TotalError_throttle();
 
     void MyCounter(double cte);
 
 
-    /*
-        Twiddle.
-    */
-    void Twiddle();
+
 };
 
 #endif /* PID_H */
