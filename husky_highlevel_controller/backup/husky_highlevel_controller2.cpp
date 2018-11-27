@@ -35,9 +35,7 @@ namespace husky_highlevel_controller
         initializePublishers();
 
         pillar_found = false;
-        PI = 3.14159265359;
-        
-        //hit_the_pillar();
+        hit_the_pillar();
 
         ROS_INFO("Successfully launched the node.");
 
@@ -66,8 +64,6 @@ namespace husky_highlevel_controller
 
     void HuskyHighLevelController::scanMessageReceived(const sensor_msgs::LaserScan &msg)
     {
-        geometry_msgs::Twist vel_msg;
-
         double front_angle1_value;
         double front_angle2_value;
         double front_angle3_value;
@@ -75,9 +71,6 @@ namespace husky_highlevel_controller
         double left_angle;
         double center_angle;
         double right_angle;
-
-        double angle_error;// = center_angle - smallest_value_angle;
-        double angle_error_degree;// = angle_error*180/3.14159265359;
 
 
         if (msg.ranges.size() > 0)
@@ -97,61 +90,31 @@ namespace husky_highlevel_controller
                     front_angle1_value = msg.ranges[355];
                     front_angle2_value = msg.ranges[356];
                     front_angle3_value  = msg.ranges[357];
+
+
+
+                        //ROS_INFO_STREAM(" PILLAR FOUND"); 
+                    //if (front_angle1_value < 3 && front_angle2_value < 3 && front_angle3_value < 3)
+                    //{
+                        pillar_found = true;
+                        //ROS_INFO_STREAM(" PILLAR FOUND"); 
+                        //ROS_INFO_STREAM(front_angle3_value); 
+
+                   // }
                 }
+                
             }
+            left_angle = (345*angle_increment + angle_minimum)*180/3.14159265359;
+            center_angle = (360*angle_increment + angle_minimum)*180/3.14159265359;
+            right_angle = (375*angle_increment + angle_minimum)*180/3.14159265359;
 
-            smallest_value_angle = smallest_value_index*angle_increment;
-            smallest_value_angle_degrees = smallest_value_angle*180/PI;
-
-
-
-            center_angle = 360*angle_increment; // 90 degrees
-            // error = target_value - sensor_reading;
-            angle_error = center_angle - smallest_value_angle;
-            angle_error_degree = angle_error*180/3.14159265359;
-
-            if (angle_error_degree < 5 && angle_error_degree > -5 )
-                pillar_found = true;
-            else
-                pillar_found = false;
-
-            if (pillar_found == false)
-            {
-                vel_msg.angular.z = 0.5;
-                vel_msg.linear.x = 0.0;
-
-                pub_vel.publish(vel_msg);  
-
-                std::cout << "angle_error = " <<  angle_error_degree << std::endl;
-            }
-            else
-            {
-
-                std::cout << "angle_error = " <<  angle_error_degree << std::endl;
-
-                //if ( angle_error > 0.2)
-                    //angle_error = 0.2;
-
-                //if ( angle_error < -0.2)
-                    //angle_error = - 0.2;
-
-                vel_msg.angular.z = -angle_error;
-                vel_msg.linear.x = 1.0;
-                pub_vel.publish(vel_msg); 
-
-            }
-
-            //left_angle = (345*angle_increment + angle_minimum)*180/3.14159265359;
-            ///center_angle = (360*angle_increment + angle_minimum)*180/3.14159265359;
-            //right_angle = (375*angle_increment + angle_minimum)*180/3.14159265359;
-
-            //angle_minimum = angle_minimum*180/3.14159265359;
-            //ROS_INFO_STREAM("Left angle: " << left_angle);
-            //ROS_INFO_STREAM("Center angle: " << center_angle);
-            //ROS_INFO_STREAM("Right angle: " << right_angle);
+            angle_minimum = angle_minimum*180/3.14159265359;
+            ROS_INFO_STREAM("Left angle: " << left_angle);
+            ROS_INFO_STREAM("Center angle: " << center_angle);
+            ROS_INFO_STREAM("Right angle: " << right_angle);
 
             //ROS_INFO_STREAM("Angle minimum: " << angle_minimum);
-            //std::cout << "" << std::endl;
+            std::cout << "" << std::endl;
 
             //center_angle = smallest_value_index*angle_increment*180/3.14159265359;
             //ROS_INFO_STREAM("Center angle by index: " << center_angle);

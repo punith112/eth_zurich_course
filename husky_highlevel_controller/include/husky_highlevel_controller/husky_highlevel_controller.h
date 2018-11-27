@@ -24,9 +24,16 @@ namespace husky_highlevel_controller
         public:
             float smallest_value;
             int smallest_value_index;
+            float smallest_value_angle;
+            float smallest_value_angle_degrees;
             float angle_increment;
             float angle_minimum;
             float cte;
+            //ros::WallTime start_time;
+            ros::Time start_time;
+            bool pillar_found;
+
+            float PI;
 
             /*
             * Constructor
@@ -40,7 +47,7 @@ namespace husky_highlevel_controller
             virtual ~HuskyHighLevelController();
 
             void hit_the_pillar();
-            ros::NodeHandle nh_;
+
 
 
         private:
@@ -51,7 +58,7 @@ namespace husky_highlevel_controller
             */
 
             // ROS node handle
-            //ros::NodeHandle nh_;
+            ros::NodeHandle nh_;
 
             // callback
             void scanMessageReceived(const sensor_msgs::LaserScan& msg);

@@ -7,11 +7,7 @@ int main(int argc, char **argv)
 
     
     // create a private namespace nodeHandle
-    ros::NodeHandle nh("~"); // ("~") is because we are accessing Private Parameters
-
-    //ros::NodeHandle nh;
-
-    //ros::Rate rate(2);
+    ros::NodeHandle nh("~"); // ("~") is because we are accessing Private Parameters. nh's namespace is /my_node_name = husky_highlevel_controller
 
     husky_highlevel_controller::HuskyHighLevelController huskyHighlevelController(&nh);
 
@@ -19,8 +15,6 @@ int main(int argc, char **argv)
     //huskyHighlevelController.hit_the_pillar();
 
    	ros::spin();
-   	//rate.sleep();
-
 
     return 0;
 }
